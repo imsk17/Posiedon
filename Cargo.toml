@@ -1,0 +1,13 @@
+[package]
+name = "poseidon"
+version = "0.1.0"
+edition = "2018"
+authors = ["imsk17 <imsumitkumar17@gmail.com>"]
+description = "A rather ambitious project - A blockchain implementation in rust"
+repository = "https://github.com/imsk17/poseidon"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sha2 = "0.9.5"
+hex = "0.4.3"
