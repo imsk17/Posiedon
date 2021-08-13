@@ -1,27 +1,28 @@
 pub mod chain;
 
 use std::fmt::{Formatter, Display};
-use sha2::Digest;
+use crate::pow::proof::ProofOfWork;
 
+#[derive(Clone)]
 pub struct Block {
     pub hash: Vec<u8>,
     pub data: Vec<u8>,
     pub prev_hash: Vec<u8>,
+    pub nonce: i64,
 }
 
 impl Block {
-    pub fn derive_hash(&mut self) {
-        let data = vec![&*self.data, &*self.prev_hash].join("".as_bytes());
-        let hash = sha2::Sha256::digest(&data);
-        self.hash = hash.to_vec();
-    }
     pub fn new(data: String, prev_hash: Vec<u8>) -> Self {
         let mut block = Block {
             hash: Vec::new(),
             data: data.into_bytes(),
             prev_hash,
+            nonce: 0,
         };
-        block.derive_hash();
+        let pow = ProofOfWork::new(block.clone());
+        let (nonce, hash) = pow.run();
+        block.hash = hash;
+        block.nonce = nonce;
         block
     }
     pub fn genesis() -> Self {

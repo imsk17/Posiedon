@@ -11,3 +11,4 @@ repository = "https://github.com/imsk17/poseidon"
 [dependencies]
 sha2 = "0.9.5"
 hex = "0.4.3"
+num-bigint = "0.4.0"
