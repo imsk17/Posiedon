@@ -1,18 +1,21 @@
-use crate::pow::proof::ProofOfWork;
+extern crate serde;
 
+use rocksdb::{DB};
+use std::path::Path;
+use chain::chain::BlockChain;
 mod block;
 mod pow;
+mod chain;
+
+const DB_PATH: &str = "./db/";
 
 fn main() {
-    let mut block_chain = block::chain::BlockChain::new();
-    block_chain.add_block("First Block after Genesis".to_string());
-    block_chain.add_block("Second Block after Genesis".to_string());
-    block_chain.add_block("Third Block after Genesis".to_string());
+    let path = Path::new(DB_PATH);
+    let db = DB::open_default(path)
+        .expect("Unable to open the database, Shutting Down!");
 
-    block_chain.blocks.iter().for_each(|b| {
-        println!("{}", b);
-        let pow = ProofOfWork::new(b.clone());
-        println!("PoW: {}", pow.validate());
-        println!("Nonce: {}", b.nonce)
-    })
+    let block_chain = BlockChain::new(db);
+    block_chain.into_iter().for_each(|b| {
+        println!("{}",b);
+    });
 }

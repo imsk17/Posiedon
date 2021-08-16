@@ -36,7 +36,6 @@ impl ProofOfWork {
         while nonce < i64::MAX {
             let data = self.init_data(nonce);
             hash = sha2::Sha256::digest(&data).to_vec();
-            print!("\r{}", hex::ToHex::encode_hex::<String>(&hash));
             let int_hash : BigInt = BigInt::from_bytes_be(Sign::Plus,&hash);
             if int_hash.cmp(&self.target) == Ordering::Less {
                 break;
