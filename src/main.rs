@@ -1,12 +1,11 @@
 extern crate serde;
 
-use color_eyre::Result;
 use chain::chain::BlockChain;
-use crate::tx::transaction::Transaction;
+use color_eyre::Result;
 
 mod block;
-mod pow;
 mod chain;
+mod pow;
 mod tx;
 mod utils;
 

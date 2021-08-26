@@ -1,8 +1,8 @@
+use crate::chain::chain::BlockChain;
 use crate::tx::tx_input::TxInput;
 use crate::tx::tx_output::TxOutput;
+use serde::{Deserialize, Serialize};
 use sha2::Digest;
-use serde::{Serialize, Deserialize};
-use crate::chain::chain::BlockChain;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Transaction {
@@ -10,7 +10,6 @@ pub struct Transaction {
     pub inputs: Vec<TxInput>,
     pub outputs: Vec<TxOutput>,
 }
-
 
 impl Transaction {
     pub fn new(from: String, to: String, amount: i32, chain: &BlockChain) -> Transaction {
@@ -30,7 +29,7 @@ impl Transaction {
                 };
                 inputs.push(input);
             }
-        };
+        }
         outputs.push(TxOutput {
             value: amount,
             pub_key: to,

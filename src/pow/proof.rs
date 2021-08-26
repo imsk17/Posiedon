@@ -1,8 +1,8 @@
 use crate::block::Block;
 use num_bigint::{BigInt, Sign};
 use sha2::Digest;
-use std::ops::ShlAssign;
 use std::cmp::Ordering;
+use std::ops::ShlAssign;
 
 const DIFFICULTY: i64 = 18;
 
@@ -15,18 +15,16 @@ impl ProofOfWork {
     pub fn new(b: Block) -> ProofOfWork {
         let mut target: BigInt = 1i64.into();
         target.shl_assign((256 - DIFFICULTY) as usize);
-        ProofOfWork {
-            block: b,
-            target,
-        }
+        ProofOfWork { block: b, target }
     }
     pub fn init_data(&self, nonce: i64) -> Vec<u8> {
         let data: Vec<u8> = [
             &*self.block.prev_hash,
             &self.block.hash_transactions(),
             &nonce.to_be_bytes().to_vec(),
-            &DIFFICULTY.to_be_bytes().to_vec()
-        ].join("".as_bytes());
+            &DIFFICULTY.to_be_bytes().to_vec(),
+        ]
+        .join("".as_bytes());
         return data;
     }
 
@@ -42,7 +40,7 @@ impl ProofOfWork {
             } else {
                 nonce += 1;
             }
-        };
+        }
         println!();
         return (nonce, hash.clone());
     }

@@ -1,6 +1,6 @@
 use crate::block::Block;
-use rocksdb::DB;
 use crate::chain::chain::BlockChain;
+use rocksdb::DB;
 use std::rc::Rc;
 
 pub struct BlockChainIterator {

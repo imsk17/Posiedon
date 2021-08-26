@@ -1,7 +1,7 @@
 use crate::chain::chain::BlockChain;
 use crate::tx::transaction::Transaction;
-use std::collections::HashMap;
 use crate::tx::tx_output::TxOutput;
+use std::collections::HashMap;
 
 impl BlockChain {
     pub fn find_unspent_transactions(&self, address: String) -> Vec<Transaction> {
@@ -12,8 +12,7 @@ impl BlockChain {
             if let Some(block) = iter.next() {
                 block.transactions.iter().for_each(|t| {
                     let tx_id = hex::ToHex::encode_hex::<String>(&t.id);
-                    'outputs:
-                    for (out_idx, out) in t.outputs.iter().enumerate() {
+                    'outputs: for (out_idx, out) in t.outputs.iter().enumerate() {
                         if let Some(v) = spent_txos.get(&tx_id) {
                             for spent_out in v {
                                 if *spent_out == out_idx as i32 {
@@ -59,12 +58,15 @@ impl BlockChain {
         utxos
     }
 
-    pub fn find_spendable_outputs(&self, address: String, amount: i32) -> (i32, HashMap<String, Vec<i32>>) {
+    pub fn find_spendable_outputs(
+        &self,
+        address: String,
+        amount: i32,
+    ) -> (i32, HashMap<String, Vec<i32>>) {
         let mut unspent_outs = HashMap::<String, Vec<i32>>::new();
         let unspent_txs = self.find_unspent_transactions(address.clone());
         let mut accumulated = 0;
-        'work:
-        for tx in &unspent_txs {
+        'work: for tx in &unspent_txs {
             let tx_id = hex::ToHex::encode_hex::<String>(&tx.id);
             for (out_idx, out) in tx.outputs.iter().enumerate() {
                 if out.can_be_unlocked(&address) && accumulated < amount {
@@ -79,7 +81,7 @@ impl BlockChain {
                     }
                 }
             }
-        };
+        }
         (accumulated, unspent_outs)
     }
 }
