@@ -23,7 +23,7 @@ impl ProofOfWork {
     pub fn init_data(&self, nonce: i64) -> Vec<u8> {
         let data: Vec<u8> = [
             &*self.block.prev_hash,
-            &*self.block.data,
+            &self.block.hash_transactions(),
             &nonce.to_be_bytes().to_vec(),
             &DIFFICULTY.to_be_bytes().to_vec()
         ].join("".as_bytes());
@@ -36,7 +36,7 @@ impl ProofOfWork {
         while nonce < i64::MAX {
             let data = self.init_data(nonce);
             hash = sha2::Sha256::digest(&data).to_vec();
-            let int_hash : BigInt = BigInt::from_bytes_be(Sign::Plus,&hash);
+            let int_hash: BigInt = BigInt::from_bytes_be(Sign::Plus, &hash);
             if int_hash.cmp(&self.target) == Ordering::Less {
                 break;
             } else {
@@ -49,7 +49,7 @@ impl ProofOfWork {
     pub fn validate(&self) -> bool {
         let data = self.init_data(self.block.nonce);
         let hash = sha2::Sha256::digest(&data);
-        let int_hash : BigInt = BigInt::from_bytes_be(Sign::Plus,&hash);
+        let int_hash: BigInt = BigInt::from_bytes_be(Sign::Plus, &hash);
         int_hash.cmp(&self.target) == Ordering::Less
     }
 }

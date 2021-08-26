@@ -1,23 +1,23 @@
 extern crate serde;
 
 use color_eyre::Result;
-use rocksdb::{DB};
-use std::path::Path;
 use chain::chain::BlockChain;
+use crate::tx::transaction::Transaction;
 
 mod block;
 mod pow;
 mod chain;
+mod tx;
+mod utils;
 
 const DB_PATH: &str = "./db/";
 
 fn main() -> Result<()> {
+    // Setup logging
     color_eyre::install()?;
     tracing_subscriber::fmt::init();
-    let path = Path::new(DB_PATH);
-    let db = DB::open_default(path)?;
-
-    let block_chain = BlockChain::new(db)?;
+    // Create a Blockchain
+    let block_chain = BlockChain::continue_bc("".parse()?)?;
     block_chain.into_iter().for_each(|b| {
         println!("{}", b);
     });
